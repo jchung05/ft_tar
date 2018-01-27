@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 14:11:14 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 14:47:08 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h> 
 
 # define BLOCK_SIZE 512
 
