@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:33:21 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 09:56:45 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 10:20:47 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int				main(void)
 {
-
+	FILE		*tar;
 	int			i;
 	int			fd_tar;
 	
@@ -23,6 +23,7 @@ int				main(void)
 		i = 1;
 		
 		fd_tar = open((const char *)argv[1], O_CREAT);//Assign fd
+//		tar = fopen((const char *)argv[1], "a");
 		
 		//Prepare to "archive" files by writing to fd per file;
 		while (argv[++i])
@@ -33,7 +34,7 @@ int				main(void)
 		}
 	}
 	else
-		printf("usage: ft_archive tar_name file1 ...\n");
+		printf("usage: ft_archive tar_name file1 [file2 ... fileN]\n");
 	close(fd_tar);
 	return (0);
 }
@@ -51,59 +52,54 @@ t_block			*init(char *name)
 	return (newblock);
 }
 
-void			ft_archive(int tarfd, char *filename, char *nextfile)
+void			ft_archive(int fd_tar, char *filename, char *nextfile)
 {
 	t_header	*header;
-	char		*arr;
-	char		*itr;
+	char		*buf;
 	int			fd_file;
-	int			arrsize;
-	int			size; //Size of file, convert to string later in header
-	int			rdbk;
+	int			write_size;
 	
 	//Init the header of file
 	header = (t_header *){filename, nextfile, 0, 0};
 
+	//Open the file being tar'd
 	fd_file = open((const char *)filename, O_RDONLY);
-	//Prepare to read, possibly with get_next_line
-	size = 0;
-	arrsize = BLOCK_SIZE;
-	itr = arr;
-	realloc(arr, arrsize); //Defaults to malloc
-
-	while ((rdbk = read(fd_file, itr, BLOCK_SIZE)))
-	{
-		size += rdbk;
-		if (size == arrsize)
-			realloc(arr, (arrsize += BLOCK_SIZE));
-		itr += rdbk;
-	}
-	header->size = size;
-	memset(itr, 0, arrsize - itr);
+	//Read all of buffer into file with a bookmark
+	write_size = write_buf(header, fd_file, &buf);
+	//Close file
 	close(fd_file);
+
+	//Write to the tarball fd the size and buffer assigned from write_buf
+	write(fd_tar, buf, write_size);
+	//Free the buffer
+	realloc(buf, 0);
+
 }
 
-char			*write_buf(t_header *header, int fd)
+/*
+ * Return the total block size stored to buffer, AKA bufsize
+ * Write directly to buf from parent function
+ */
+int				write_buf(t_header *header, int fd, char **buf)
 {
-	char		*buf;
 	char		*itr;
 	int			bufsize;
 	int			size;
 	int			rdbk;
 	
-	itr = buf;
+	itr = *buf;
 	bufsize = BLOCK_SIZE;
 	size = 0;
-	realloc(buf, bufsize);
+	realloc(*buf, bufsize);
 
 	while ((rdbk = read(fd, itr, BLOCK_SIZE)))
 	{
 		size += rdbk;
-		if (size == arrsize)
-			realloc(buf, (bufsize += BLOCK_SIZE));
 		itr += rdbk;
+		if (size == arrsize)
+			realloc(*buf, (bufsize += BLOCK_SIZE));
 	}
 	header->size = size;
 	memset(itr, 0, arrsize - itr);
-	return (buf);
+	return (bufsize);
 }
