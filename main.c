@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:33:21 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 10:20:47 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 14:11:53 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,6 @@ int				main(void)
 	return (0);
 }
 
-t_block			*init(char *name)
-{
-	t_block		*newblock;
-	
-	newblock = (t_block *)malloc(sizeof(t_block));
-	if (!newblock)
-		return ((t_block *)0);
-	newblock->size = 0;
-	newblock->filename = name;
-	newblock->next = (t_block *)0;
-	return (newblock);
-}
-
 void			ft_archive(int fd_tar, char *filename, char *nextfile)
 {
 	t_header	*header;
@@ -60,7 +47,8 @@ void			ft_archive(int fd_tar, char *filename, char *nextfile)
 	int			write_size;
 	
 	//Init the header of file
-	header = (t_header *){filename, nextfile, 0, 0};
+	//header = (t_header *){filename, 0, 0, 0, 0, 0, 0, 0, nextfile, 0};
+	header = init(filename, nextfile);
 
 	//Open the file being tar'd
 	fd_file = open((const char *)filename, O_RDONLY);
@@ -74,6 +62,22 @@ void			ft_archive(int fd_tar, char *filename, char *nextfile)
 	//Free the buffer
 	realloc(buf, 0);
 
+}
+
+t_header		*init(char *filename, char *nextfile)
+{
+	t_header	*header;
+	struct stat	st;
+
+	header = (t_header *){filename, 0, 0, 0, 0, 0, 0, 0, nextfile, 0};
+	if (!stat(filename, &st))
+		return ((t_header *)0);
+	header->mode = st.st_mode;
+	header->uid = st.st_uid;
+	header->gid = st.st_gid;
+	header->size = st.st_size;
+	header->mtime = st.st_mtime;
+	return (header);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 09:10:11 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 14:11:14 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,19 @@
 # define BLOCK_SIZE 512
 
 typedef struct		s_header {
-	char			name[100];
-	char			linkname[100];
-	char			size[12];
-	char			filler[300];
+	char			name[100]; //Argument derived
+	char			mode[8]; //x.st_mode
+	char			uid[8]; //x.st_uid
+	char			gid[8]; //x.st_gid
+	char			size[12]; //x.st_size
+	char			mtime[12]; //x.st_mtime
+	char			checksum[8];
+	char			link[1];
+	char			linkname[100]; //Argument derived
+	char			filler[255];
 }					t_header;
 
+t_header			*init(char *filename, char *nextfile);
 void				ft_archive(int tarfd, char *filename, char *nextfile);
 
 #endif
