@@ -28,9 +28,16 @@ typedef struct		s_header {
 	char			size[12]; //x.st_size
 	char			mtime[12]; //x.st_mtime
 	char			checksum[8];
-	char			link[1];
+	char			typeflag[1];
 	char			linkname[100]; //Argument derived
-	char			filler[255];
+	char			magic[6];
+	char			version[2];
+	char			uname[32];
+	char			gname[32];
+	char			devmajor[8];
+	char			devminor[8];
+	char			prefix[155];
+	char			pad[12];
 }					t_header;
 
 t_header			*initheader(char *filename);
