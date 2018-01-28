@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:33:21 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 16:52:56 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 17:36:45 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@ int				main(int argc, char **argv)
 {
 	FILE		*tar;
 	
+	tar = (FILE *)0;
 	if (argc > 2)
 	{
 		tar = fopen((const char *)argv[1], "a");
 		ft_archive(tar, &argv[2]);
+		fclose(tar);
 	}
 	else
 		printf("usage: ft_archive tar_name file1 [file2 ... fileN]\n");
-	fclose(tar);
 	return (0);
 }
 
@@ -37,23 +38,21 @@ t_header		*init(char *filename, char *nextfile)
 	t_header	*header;
 	struct stat	st;
 
-	header = (t_header *){filename, 0, 0, 0, 0, 0, 0, 0, nextfile, 0};
+	header = (t_header *)malloc(sizeof(t_header));
+	if (!header)
+		return ((t_header *)0);
+	strcpy(header->name, filename);
+	strcpy(header->linkname, nextfile);
 	if (!stat(filename, &st))
 		return ((t_header *)0);
-	/*
-	header->mode = st.st_mode;
-	header->uid = st.st_uid;
-	header->gid = st.st_gid;
-	header->size = st.st_size;
-	header->mtime = st.st_mtime;
-	*/
-	strcpy((mode_t)header->mode, st.st_mode);
-	strcpy((uid_t)header->uid, st.st_uid);
-	strcpy((gid_t)header->gid, st.st_gid);
-	strcpy((off_t)header->size, st.st_size);
-	strcpy((time_t)header->mtime, st.st_mtime);
+	memcpy(header->mode, &st.st_mode, sizeof(mode_t));
+	memcpy(header->uid, &st.st_uid, sizeof(uid_t));
+	memcpy(header->gid, &st.st_gid, sizeof(gid_t));
+	memcpy(header->size, &st.st_size, sizeof(off_t));
+	memcpy(header->mtime, &st.st_mtime, sizeof(time_t));
 	return (header);
 }
+
 /*
  * Pass the tar file object with "append" properties and the list of args from main
  * Initialize file header with metadata using stat()
@@ -63,7 +62,6 @@ t_header		*init(char *filename, char *nextfile)
  * fwrite() header and body to tar file object
  * Recursively call ft_archive on next argument of argv
  */
-
 void			ft_archive(FILE *tar, char **argv)
 {
 	t_header	*header;
@@ -86,7 +84,8 @@ void			ft_archive(FILE *tar, char **argv)
 	}
 	else
 	{
-		header = (t_header *){0};
+		header = init(0, 0);
+		f = (FILE *)0;
 		buf = (char *)malloc(BLOCK_SIZE);
 		if (!buf)
 			return ;
@@ -96,6 +95,7 @@ void			ft_archive(FILE *tar, char **argv)
 	fwrite(buf, sizeof(buf), 1, tar);
 	fclose(f);
 	free(buf);
+	free(header);
 	if (argv[0])
 		ft_archive(tar, &argv[1]);
 }
