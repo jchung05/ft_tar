@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 16:27:06 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 22:31:16 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef struct		s_header {
 	char			filler[255];
 }					t_header;
 
-t_header			*init(char *filename, char *nextfile);
-void				ft_archive(FILE *tar, char **argv);
+t_header			*initheader(char *filename);
+void				ft_archive(FILE *F, char **argv);
+void				free_archive(char *buf, t_header *header);
 
 #endif
