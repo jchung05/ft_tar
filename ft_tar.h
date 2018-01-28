@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 14:47:08 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/27 16:27:06 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 # include <sys/stat.h> 
 
 # define BLOCK_SIZE 512
@@ -33,6 +34,6 @@ typedef struct		s_header {
 }					t_header;
 
 t_header			*init(char *filename, char *nextfile);
-void				ft_archive(int tarfd, char *filename, char *nextfile);
+void				ft_archive(FILE *tar, char **argv);
 
 #endif
