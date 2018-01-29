@@ -6,12 +6,13 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/28 17:46:18 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/28 18:08:21 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_TAR_H
 # define FT_TAR_H
+# include <dirent.h>
 # include <fcntl.h>
 # include <grp.h>
 # include <pwd.h>
