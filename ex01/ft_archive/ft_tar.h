@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/28 18:08:21 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/28 20:37:26 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct		s_header {
 	char			pad[12];
 }					t_header;
 
-t_header			*initheader(char *filename);
 void				ft_archive(FILE *tar, char **argv);
 void				free_archive(char *buf, t_header *header);
 
@@ -52,7 +51,10 @@ void				write_block(FILE *tar, char **argv);
 void				write_end_block(FILE *tar, char **argv);
 int					get_block_size(int size);
 
-char				*getName(uid_t uid);
-char				*getGroup(gid_t gid);
+t_header			*initheader(char *filename);
+char				*getname(uid_t uid);
+char				*getgroup(gid_t gid);
+void				setchecksum(t_header *header);
+void				settypeflag_mode(t_header *header, mode_t mode);
 
 #endif
