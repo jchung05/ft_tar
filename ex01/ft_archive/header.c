@@ -6,7 +6,7 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/28 20:36:05 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/28 20:38:14 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/28 20:59:29 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ t_header			*initheader(char *filename)
 	(header->mtime)[sizeof(header->mtime) - 1] = ' ';
 	sprintf(header->magic, "%s", "ustar");
 	memset(header->version, '0', 2);
-	sprintf(header->uname, "%.31s", getName(st.st_uid));
-	sprintf(header->gname, "%.31s", getGroup(st.st_gid));
+	sprintf(header->uname, "%.31s", getname(st.st_uid));
+	sprintf(header->gname, "%.31s", getgroup(st.st_gid));
 	sprintf(header->devmajor, "%06u ", major(st.st_rdev));
 	sprintf(header->devminor, "%06u ", minor(st.st_rdev));
 	setchecksum(header);

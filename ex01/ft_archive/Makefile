@@ -6,7 +6,7 @@
 #    By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/28 20:44:30 by sjuery            #+#    #+#              #
-#    Updated: 2018/01/28 20:49:38 by sjuery           ###   ########.fr        #
+#    Updated: 2018/01/28 21:00:53 by jchung           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ NAME	= ft_archive
 SRC		= 	ft_archive.c \
 			header.c \
 			main.c \
+
+INC		=	-I.
 
 OBJ 	= $(SRC:.c=.o)
 CFLAG	= -Wall -Wextra -Werror -g
