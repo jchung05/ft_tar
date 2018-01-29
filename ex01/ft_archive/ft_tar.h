@@ -6,17 +6,20 @@
 /*   By: jchung <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/27 08:15:55 by jchung            #+#    #+#             */
-/*   Updated: 2018/01/27 22:31:16 by jchung           ###   ########.fr       */
+/*   Updated: 2018/01/28 17:46:18 by jchung           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_TAR_H
 # define FT_TAR_H
 # include <fcntl.h>
+# include <grp.h>
+# include <pwd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h> 
+# include <sys/types.h>
 
 # define BLOCK_SIZE 512
 
@@ -41,7 +44,14 @@ typedef struct		s_header {
 }					t_header;
 
 t_header			*initheader(char *filename);
-void				ft_archive(FILE *F, char **argv);
+void				ft_archive(FILE *tar, char **argv);
 void				free_archive(char *buf, t_header *header);
+
+void				write_block(FILE *tar, char **argv);
+void				write_end_block(FILE *tar, char **argv);
+int					get_block_size(int size);
+
+char				*getName(uid_t uid);
+char				*getGroup(gid_t gid);
 
 #endif
